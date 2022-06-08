@@ -42,7 +42,7 @@ public class RequestController
     @ResponseStatus(HttpStatus.OK)
     public String createRequest(@RequestBody Request request)
     {
-
+        LOGGER.info("Validacion de creacion de solicitud");
         String accountNumberClient = request.getNumberAccountClient();
         Double amountWithdrawal = request.getAmountWithdrawal();
         String message = null;
@@ -59,6 +59,7 @@ public class RequestController
 
         if(amountWithdrawal > balanceClient)
         {
+            LOGGER.info("Validacion de monto no permitido");
             request.setStatusRequestMoney("noPermitido");
             message = "No se puede registrar la solicitud. Monto mayor que el permitido";
         }
@@ -66,11 +67,13 @@ public class RequestController
         {
             if(amountWithdrawal < balanceClient && amountWithdrawal > amountAllow)
             {
+                LOGGER.info("Validacion de monto menor al actual pero mayor al permitido");
                 request.setStatusRequestMoney("permitido");
                 message = "Se registro la solicitud con exito";
             }
             if(amountWithdrawal < balanceClient && amountWithdrawal<=amountAllow)
             {
+                LOGGER.info("Validacion de monto permitido a desembolsar");
                 request.setStatusRequestMoney("noPermitido");
                 message = "Monto mínimo no cubierto por favor revise el monto mínimo a retirar";
             }
